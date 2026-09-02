@@ -75,7 +75,7 @@ const getAllIssuesFromDB=async(query:{ sort?:string, type?:string, status?:strin
     return issues;
 }
 
-//get Single Issue
+// get Single Issue
 const getSingleIssueFromDB=async(id:string)=>{
      const result=await pool.query(`
         SELECT * FROM issues
@@ -108,9 +108,48 @@ const getSingleIssueFromDB=async(id:string)=>{
     return singleIssue;
 }
 
+// Update Issue
+const updateIsssueFromDB=async(id:string,payload:{title:string,description:string,type:string},reporterId:number,userRole:string)=>{
+   const {title,description,type}=payload;
+
+   //Finding issue
+   const issueResult=await pool.query(`
+    SELECT * FROM issues
+    WHERE id=$1
+    `,[id]);
+
+    if(issueResult.rows.length===0){
+        throw new Error("Issue not found!");
+    }
+
+    const issue=issueResult.rows[0];
+
+    // Permission
+    if(userRole !== "maintainer"){
+        if(issue.reporter_id !== reporterId || issue.status !=="open"){
+            throw new Error("You don't have permission to update this issue!");
+        }
+    }
+
+    // Update issue
+    const result=await pool.query(`
+        UPDATE issues
+        SET
+          title=COALESCE($1,title),
+          description=COALESCE($2, description),
+          type=COALESCE($3,type),
+          updated_at=NOW()
+        WHERE id=$4
+        RETURNING *
+        `,[title,description,type,id]);
+
+    return result.rows[0];
+}
+
 
 export const issueService={
     createIssueIntoDB,
     getAllIssuesFromDB,
     getSingleIssueFromDB,
+    updateIsssueFromDB
 }
