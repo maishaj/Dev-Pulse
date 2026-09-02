@@ -31,7 +31,7 @@ const loginUser=async(req:Request,res:Response)=>{
       sendResponse(res,{
         statusCode:200,
         success:true,
-        message:"User registered successfully",
+        message:"Login successful",
         data:{
             token:result.accessToken,
             user:result.user

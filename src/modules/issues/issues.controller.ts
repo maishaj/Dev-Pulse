@@ -38,6 +38,15 @@ const getAllIssues=async(req:Request,res:Response)=>{
  
        const result=await issueService.getAllIssuesFromDB(query);
 
+       if (result.length === 0){ 
+          sendResponse(res, { 
+            statusCode: 404, 
+            success: false, 
+            message: "No issues found", 
+          }); 
+          return; 
+      }
+
        sendResponse(res,{
         statusCode: 200,
         success: true,
@@ -109,7 +118,7 @@ const deleteUser=async(req:Request,res:Response)=>{
   
   const {id}=req.params;
   try{
-    const result=await issueService.deleteIssueFromDB(id as string);
+    const result=await issueService.deleteIssueFromDB(id as string,req.user!.role);
 
     if(result.rowCount===0){
       res.status(404).json({
@@ -135,7 +144,6 @@ const deleteUser=async(req:Request,res:Response)=>{
       error:error
     })
   }
-
 }
 
 

@@ -147,7 +147,12 @@ const updateIsssueFromDB=async(id:string,payload:{title:string,description:strin
 }
 
 // Delete Issue
-const deleteIssueFromDB=async(id:string)=>{
+const deleteIssueFromDB=async(id:string,userRole:string)=>{
+
+    // Permission
+    if(userRole !== "maintainer"){
+            throw new Error("You don't have permission to delete this issue!");
+    }
    const result=await pool.query(`
     DELETE FROM issues WHERE id=$1
     `,[id]);
