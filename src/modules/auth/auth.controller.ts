@@ -8,7 +8,7 @@ const signupUser=async(req:Request, res:Response)=>{
       const result=await authService.sinupUserIntoDB(req.body);
 
       sendResponse(res,{
-        statusCode:200,
+        statusCode:201,
         success:true,
         message:"User registered successfully",
         data:result.rows[0]
