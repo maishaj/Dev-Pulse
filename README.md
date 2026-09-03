@@ -280,11 +280,11 @@ PostgreSQL hosted using:
 ## Live URL
 
 ```text
-<your-live-deployment-url>
+<https://dev-pulse-bqx4z4def-maishajs-projects.vercel.app/>
 ```
 
 ## GitHub Repository
 
 ```text
-<your-public-github-repository-url>
+<https://github.com/maishaj/Dev-Pulse>
 ```
